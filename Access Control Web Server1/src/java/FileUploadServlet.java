@@ -1,13 +1,15 @@
 
-//import connection.MysqlConnection;
+import connection.MysqlConnection;
 import java.io.File;
 import java.util.Date;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,87 +44,7 @@ public class FileUploadServlet extends HttpServlet {
     throws ServletException, IOException {
           response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        group_name=request.getParameter("group_name");
-        user=request.getParameter("user");
-        boolean allow=false;
-
-        Date date = new Date();
-    SimpleDateFormat simpDate;
-
-    simpDate = new SimpleDateFormat("kk:mm:ss");
-    simpDate.format(date);
-
-
-         int hour=date.getHours();
-         int min=date.getMinutes();
-System.out.println("user="+user);
-         ArrayList<RevocationParameters> rlist=(ArrayList<RevocationParameters>)getServletContext().getAttribute("revocation_list");
-         Iterator<RevocationParameters> itr=rlist.iterator();
-         while(itr.hasNext())
-         {
-             RevocationParameters rparam=itr.next();
-             System.out.println(rparam.username);
-            
-            System.out.println(user);
-             if(rparam.group_name.equals(group_name)&&rparam.username.equals(username))
-             {
-                 access=rparam.access;
-                 master_key=rparam.master_key;
-                 srandom=rparam.srandom;
-                 String start_time=rparam.start_time;
-                 String end_time=rparam.end_time;
-
-                 StringTokenizer st=new StringTokenizer(start_time,":");
-                 int shour=Integer.parseInt(st.nextToken());
-                 int smin=Integer.parseInt(st.nextToken());
-
-                 st=new StringTokenizer(end_time,":");
-                 int ehour=Integer.parseInt(st.nextToken());
-                 int emin=Integer.parseInt(st.nextToken());
-
-                 if(shour<hour)
-                 {
-                     if(ehour>hour)
-                     {
-                        allow=true;
-                        break;
-                     }
-                     else if(ehour==hour)
-                     {
-                         if(emin>min)
-                         {
-                             allow=true;
-                              break;
-                         }
-                         else
-                         {
-                             allow=false;
-                              break;
-                         }
-
-                     }
-
-                 }
-                 else if(shour==hour)
-                 {
-                     if(smin<min)
-                     {
-                         allow=true;
-                          break;
-                     }
-                     else
-                     {
-                         allow=false;
-                          break;
-                     }
-                 }
-
-
-             }
-
-         }
-         if(allow)
-         {
+        
         try
         {
          filePath=getServletContext().getRealPath("files");
@@ -193,24 +115,24 @@ try {
 		e.printStackTrace();
 		return;
 	}
- 
+
 	System.out.println("MySQL JDBC Driver Registered!");
 	Connection connection = null;
 	PreparedStatement pst;
 	ResultSet rst;
 
- 
+
 	try {
 		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloud_data1","root", "root");
- 
+
 	} catch (SQLException e) {
 		System.out.println("Connection Failed! Check output console");
 		e.printStackTrace();
 		return;
 	}
- 
+
 	if (connection != null) {
-	
+
 	try{
 		System.out.println("You made it, take control your database now!");
 		pst=connection.prepareStatement("insert into data_list(group_name,username,file_name,categry,branch)value		(?,?,?,?,?)");
@@ -233,9 +155,11 @@ catch (SQLException e) {
 		System.out.println("Failed to make connection!");
 	}
 
-            
-           
+
+
         }
+
+             }
 
         catch(Exception e)
         {
@@ -246,11 +170,8 @@ catch (SQLException e) {
             out.close();
         }
          }
-         else
-        {
-             out.println("Access Denied");
-        }
-    }
+         
+    
 
      public byte[] decryptdata(byte[] data,SecretKey key)
     {
