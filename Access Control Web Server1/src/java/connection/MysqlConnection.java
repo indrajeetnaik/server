@@ -10,7 +10,7 @@ public class MysqlConnection
     static String url = "jdbc:mysql://localhost:3306/";
     static String db = "cloud_data1";
     static String driver = "com.mysql.jdbc.Driver";
-    static String username="root",password="divya";
+    static String username="root",password="root";
     public Connection connection;
     
     public Connection establishConnection()

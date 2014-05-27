@@ -1,8 +1,10 @@
-//package com.mkyong.common;
+package com.mkyong.common;
  
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
  
 public class testmysql {
  
@@ -20,10 +22,12 @@ public class testmysql {
  
 	System.out.println("MySQL JDBC Driver Registered!");
 	Connection connection = null;
+PreparedStatement pst;
+ResultSet rst;
  
 	try {
 		connection = DriverManager
-		.getConnection("jdbc:mysql://localhost:3306/newDB","root", "sit");
+		.getConnection("jdbc:mysql://localhost:3306/cloud_data1","root", "root");
  
 	} catch (SQLException e) {
 		System.out.println("Connection Failed! Check output console");
@@ -32,7 +36,18 @@ public class testmysql {
 	}
  
 	if (connection != null) {
+try{
 		System.out.println("You made it, take control your database now!");
+pst=connection.prepareStatement("insert into data_list(group_name,username,file_name,categry,branch)values ('a','c','d','d','e')");
+pst.executeUpdate();
+pst.close();
+connection.close();
+}
+catch (SQLException e) {
+                System.out.println("jhhhhhhhhhhhhhhhhhh");
+                e.printStackTrace();
+                return;
+}
 	} else {
 		System.out.println("Failed to make connection!");
 	}

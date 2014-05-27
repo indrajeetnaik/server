@@ -189,7 +189,7 @@ System.out.println("user="+user);
             while(st.hasMoreTokens())
             {
             con=MysqlConnection.getMysqlConnection();
-            pst=con.prepareStatement("insert into data_list (group_name,usernamename,file_name,categry,branch) values (?,?,?,?,?)");
+            pst=con.prepareStatement("insert into data_list (group_name,username,file_name,categry,branch) values (?,?,?,?,?)");
 
             pst.setString(1,group_name);
             pst.setString(2,username);
