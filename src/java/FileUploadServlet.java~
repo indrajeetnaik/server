@@ -154,8 +154,13 @@ catch (SQLException e) {
                 e.printStackTrace();
                 return;
 }               
-}
 
+
+        }
+        catch(Exception e)
+        {
+            out.println("Message"+e.getLocalizedMessage());
+        }
         finally
         {
             out.close();
